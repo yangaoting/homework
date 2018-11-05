@@ -46,10 +46,10 @@ public class MyGenerator {
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setDbType(DbType.MYSQL);
-        dsc.setDriverName("com.mysql.jdbc.Driver");
+        dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("root");
-        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/homework?characterEncoding=utf8");
+        dsc.setUrl("jdbc:mysql://127.0.0.1:3306/homework?characterEncoding=utf8&serverTimezone=GMT%2B8&amp&useSSL=false");
         mpg.setDataSource(dsc);
 
         // 策略配置
@@ -57,7 +57,7 @@ public class MyGenerator {
 //        strategy.setTablePrefix(new String[]{""});// 此处可以修改为您的表前缀
 //        strategy.setNaming(NamingStrategy.remove_prefix_and_camel);// 表名生成策略
 //        strategy.setNaming(NamingStrategy.removePrefixAndCamel());// 表名生成策略
-        strategy.setInclude(new String[]{"user"}); // 需要生成的表
+        strategy.setInclude(new String[]{"user","category","post","comment"}); // 需要生成的表
 //        strategy.setExclude(new String[]{"t_rong_bid"}); // 排除生成的表
         // 字段名生成策略
         strategy.setNaming(NamingStrategy.underline_to_camel);

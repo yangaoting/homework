@@ -1,5 +1,6 @@
 package com.homework.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @author yan'gaoting
  * @since 2018-10-31
  */
+@TableName(value = "test_user")
 public class User extends Model<User> {
 
     private static final long serialVersionUID = 1L;
