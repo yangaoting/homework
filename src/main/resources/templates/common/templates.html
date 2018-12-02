@@ -13,14 +13,13 @@
                     <a href="/"><i class="iconfont icon-jiaoliu"></i>交流</a>
                 </li>
                 <li class="layui-nav-item">
-                    <a href="case/case.html"><i class="iconfont icon-iconmingxinganli"></i>案例</a>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="http://www.layui.com/" target="_blank"><i class="iconfont icon-ui"></i>框架</a>
+                    <a target="_blank" href="http://mp.weixin.qq.com/profile?src=3&timestamp=1540977861&ver=1&signature=3qeqO*kmTtJFJWWbPXYE-fFExWqw57D1R0JOxhYwfWoTw6-MHGf1E5tos8VrZBBY786QL7JFWDZIIDxsTMdRKA==">
+                        <i class="iconfont icon-iconmingxinganli"></i>公众号
+                    </a>
                 </li>
             </ul>
 
-            <ul class="layui-nav fly-nav-user">
+            <ul class="layui-nav fly-nav-user" th:if="${profile == null}">
 
                 <!-- 未登入的状态 -->
                 <li class="layui-nav-item">
@@ -38,15 +37,16 @@
                 <li class="layui-nav-item layui-hide-xs">
                     <a href="/app/weibo/" onclick="layer.msg('正在通过微博登入', {icon:16, shade: 0.1, time:0})" title="微博登入" class="iconfont icon-weibo"></a>
                 </li>
+            </ul>
 
+            <ul class="layui-nav fly-nav-user" th:if="${profile != null}">
                 <!-- 登入后的状态 -->
-                <!--
                 <li class="layui-nav-item">
                   <a class="fly-nav-avatar" href="javascript:;">
-                    <cite class="layui-hide-xs">贤心</cite>
+                    <cite class="layui-hide-xs" th:text="${profile.username}"></cite>
                     <i class="iconfont icon-renzheng layui-hide-xs" title="认证信息：layui 作者"></i>
                     <i class="layui-badge fly-badge-vip layui-hide-xs">VIP3</i>
-                    <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg">
+                    <img th:src="${profile.avatar}">
                   </a>
                   <dl class="layui-nav-child">
                     <dd><a href="user/set.html"><i class="layui-icon">&#xe620;</i>基本设置</a></dd>
@@ -56,7 +56,6 @@
                     <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
                   </dl>
                 </li>
-                -->
             </ul>
         </div>
     </div>
@@ -68,13 +67,10 @@
     <div class="fly-panel fly-column">
         <div class="layui-container">
             <ul class="layui-clear">
-                <li class="layui-hide-xs layui-this"><a href="/">首页</a></li>
-                <li><a href="jie/index.html">提问</a></li>
-                <li><a href="jie/index.html">分享<span class="layui-badge-dot"></span></a></li>
-                <li><a href="jie/index.html">讨论</a></li>
-                <li><a href="jie/index.html">建议</a></li>
-                <li><a href="jie/index.html">公告</a></li>
-                <li><a href="jie/index.html">动态</a></li>
+                <li th:classappend="${currentCategoryId} == null ? 'layui-hide-xs layui-this' : ''"><a href="/">首页</a></li>
+                <li th:each="category: ${application.categorys}" th:classappend="${category.id} eq ${currentCategoryId} ? 'layui-hide-xs layui-this' : ''">
+                    <a th:href="'/category/' + ${category.id}" th:text="${category.name}"></a>
+                </li>
                 <li class="layui-hide-xs layui-hide-sm layui-show-md-inline-block"><span class="fly-mid"></span></li>
 
                 <!-- 用户登入后显示 -->

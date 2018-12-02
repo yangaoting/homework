@@ -1,7 +1,7 @@
 package com.homework.mapper;
 
-import com.homework.entity.Category;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.homework.entity.Category;
 
 /**
  * <p>

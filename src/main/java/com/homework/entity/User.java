@@ -3,23 +3,29 @@ package com.homework.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDateTime;
+
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
  * 
  * </p>
  *
- * @author yan'gaoting
- * @since 2018-11-01
+ * @author lv-success
+ * @since 2018-10-14
  */
 public class User extends Model<User> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id",type = IdType.AUTO)
+    /**
+     * 主键ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
+
     /**
      * 昵称
      */
@@ -83,21 +89,26 @@ public class User extends Model<User> {
     /**
      * 最后的登陆时间
      */
-    private LocalDateTime lasted;
+    private Date lasted;
 
     /**
      * 创建日期
      */
-    private LocalDateTime created;
+    private Date created;
 
     /**
      * 最后修改时间
      */
-    private LocalDateTime modified;
+    private Date modified;
 
-    public Long getId() { return id; }
 
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -195,39 +206,40 @@ public class User extends Model<User> {
         this.status = status;
     }
 
-    public LocalDateTime getLasted() {
+    public Date getLasted() {
         return lasted;
     }
 
-    public void setLasted(LocalDateTime lasted) {
+    public void setLasted(Date lasted) {
         this.lasted = lasted;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
-    public LocalDateTime getModified() {
+    public Date getModified() {
         return modified;
     }
 
-    public void setModified(LocalDateTime modified) {
+    public void setModified(Date modified) {
         this.modified = modified;
     }
 
     @Override
     protected Serializable pkVal() {
-        return null;
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "User{" +
-        "username=" + username +
+        "id=" + id +
+        ", username=" + username +
         ", password=" + password +
         ", email=" + email +
         ", mobile=" + mobile +

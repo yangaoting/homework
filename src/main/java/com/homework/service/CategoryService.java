@@ -1,7 +1,7 @@
 package com.homework.service;
 
-import com.homework.entity.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.homework.entity.Category;
 
 /**
  * <p>
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author yan'gaoting
  * @since 2018-11-01
  */
-public interface CategoryService extends IService<Category> {
+public interface CategoryService extends BaseService<Category> {
 
 }

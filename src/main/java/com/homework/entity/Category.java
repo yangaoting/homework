@@ -1,20 +1,29 @@
 package com.homework.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDateTime;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
  * 
  * </p>
  *
- * @author yan'gaoting
- * @since 2018-11-01
+ * @author lv-success
+ * @since 2018-10-14
  */
 public class Category extends Model<Category> {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
      * 标题
@@ -61,10 +70,18 @@ public class Category extends Model<Category> {
     /**
      * 创建日期
      */
-    private LocalDateTime created;
+    private Date created;
 
-    private LocalDateTime modified;
+    private Date modified;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -138,31 +155,32 @@ public class Category extends Model<Category> {
         this.metaDescription = metaDescription;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
-    public LocalDateTime getModified() {
+    public Date getModified() {
         return modified;
     }
 
-    public void setModified(LocalDateTime modified) {
+    public void setModified(Date modified) {
         this.modified = modified;
     }
 
     @Override
     protected Serializable pkVal() {
-        return null;
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "Category{" +
-        "name=" + name +
+        "id=" + id +
+        ", name=" + name +
         ", content=" + content +
         ", summary=" + summary +
         ", icon=" + icon +

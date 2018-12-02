@@ -1,20 +1,29 @@
 package com.homework.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDateTime;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
  * 
  * </p>
  *
- * @author yan'gaoting
- * @since 2018-11-01
+ * @author lv-success
+ * @since 2018-10-14
  */
 public class Post extends Model<Post> {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
      * 标题
@@ -56,7 +65,7 @@ public class Post extends Model<Post> {
     /**
      * 评论数量
      */
-    private Integer commentCount;
+    private Integer CommentCount;
 
     /**
      * 是否为精华
@@ -76,13 +85,21 @@ public class Post extends Model<Post> {
     /**
      * 创建日期
      */
-    private LocalDateTime created;
+    private Date created;
 
     /**
      * 最后更新日期
      */
-    private LocalDateTime modified;
+    private Date modified;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -148,14 +165,6 @@ public class Post extends Model<Post> {
         this.viewCount = viewCount;
     }
 
-    public Integer getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(Integer commentCount) {
-        this.commentCount = commentCount;
-    }
-
     public Boolean getRecommend() {
         return recommend;
     }
@@ -180,44 +189,53 @@ public class Post extends Model<Post> {
         this.status = status;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
-    public LocalDateTime getModified() {
+    public Date getModified() {
         return modified;
     }
 
-    public void setModified(LocalDateTime modified) {
+    public void setModified(Date modified) {
         this.modified = modified;
+    }
+
+    public Integer getCommentCount() {
+        return CommentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        CommentCount = commentCount;
     }
 
     @Override
     protected Serializable pkVal() {
-        return null;
+        return this.id;
     }
 
     @Override
     public String toString() {
         return "Post{" +
-        "title=" + title +
-        ", content=" + content +
-        ", editMode=" + editMode +
-        ", categoryId=" + categoryId +
-        ", userId=" + userId +
-        ", voteUp=" + voteUp +
-        ", voteDown=" + voteDown +
-        ", viewCount=" + viewCount +
-        ", commentCount=" + commentCount +
-        ", recommend=" + recommend +
-        ", level=" + level +
-        ", status=" + status +
-        ", created=" + created +
-        ", modified=" + modified +
-        "}";
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", editMode='" + editMode + '\'' +
+                ", categoryId=" + categoryId +
+                ", userId=" + userId +
+                ", voteUp=" + voteUp +
+                ", voteDown=" + voteDown +
+                ", viewCount=" + viewCount +
+                ", CommentCount=" + CommentCount +
+                ", recommend=" + recommend +
+                ", level=" + level +
+                ", status=" + status +
+                ", created=" + created +
+                ", modified=" + modified +
+                '}';
     }
 }
