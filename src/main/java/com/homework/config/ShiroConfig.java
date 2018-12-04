@@ -1,5 +1,6 @@
 package com.homework.config;
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.homework.shiro.OAuth2Realm;
 import org.apache.shiro.mgt.SecurityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -46,5 +47,10 @@ public class ShiroConfig {
         filterFactoryBean.setFilterChainDefinitionMap(hashMap);
 
         return filterFactoryBean;
+    }
+
+    @Bean
+    public ShiroDialect shiroDialect(){
+        return new ShiroDialect();
     }
 }

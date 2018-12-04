@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -52,6 +51,11 @@ public class User extends Model<User> {
     private Integer point;
 
     /**
+     * 个性签名
+     */
+    private String sign;
+
+    /**
      * 性别
      */
     private String gender;
@@ -62,9 +66,14 @@ public class User extends Model<User> {
     private String wechat;
 
     /**
+     *
+     */
+    private String vipLevel;
+
+    /**
      * 生日
      */
-    private LocalDateTime birthday;
+    private Date birthday;
 
     /**
      * 头像
@@ -150,6 +159,14 @@ public class User extends Model<User> {
         this.point = point;
     }
 
+    public String getSign() {
+        return sign;
+    }
+
+    public void setSign(String sign) {
+        this.sign = sign;
+    }
+
     public String getGender() {
         return gender;
     }
@@ -166,11 +183,17 @@ public class User extends Model<User> {
         this.wechat = wechat;
     }
 
-    public LocalDateTime getBirthday() {
+    public String getVipLevel() { return vipLevel; }
+
+    public void setVipLevel(String vipLevel) {
+        this.vipLevel = vipLevel;
+    }
+
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocalDateTime birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 
@@ -244,8 +267,10 @@ public class User extends Model<User> {
         ", email=" + email +
         ", mobile=" + mobile +
         ", point=" + point +
+        "，sign=" + sign +
         ", gender=" + gender +
         ", wechat=" + wechat +
+        ", vipLevel=" + vipLevel +
         ", birthday=" + birthday +
         ", avatar=" + avatar +
         ", postCount=" + postCount +

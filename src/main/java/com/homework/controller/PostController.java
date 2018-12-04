@@ -26,7 +26,7 @@ public class PostController extends BaseController {
 
         req.setAttribute("post",post);
 
-        return "post";
+        return "post/index";
     }
 
     @GetMapping("/category/{id}")
@@ -47,6 +47,6 @@ public class PostController extends BaseController {
         req.setAttribute("pageData",pageData);
         req.setAttribute("currentCategoryId",id);
 
-        return "category";
+        return "post/category";
     }
 }

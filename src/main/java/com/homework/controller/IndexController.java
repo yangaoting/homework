@@ -110,6 +110,7 @@ public class IndexController extends BaseController{
         }
 
         AuthenticationToken token = new UsernamePasswordToken(email, SecureUtil.md5(password));
+        log.info(SecureUtil.md5(password));
 
         try {
             //尝试登陆，将会调用realm的认证方法
@@ -127,6 +128,12 @@ public class IndexController extends BaseController{
         }
 
         return R.ok("登陆成功");
+    }
+
+    @GetMapping("/user/logout")
+    public String logout(){
+        SecurityUtils.getSubject().logout();
+        return "redirect:/";
     }
 }
 

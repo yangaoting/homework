@@ -25,28 +25,26 @@
           您的邮箱尚未验证，这比较影响您的帐号安全，<a href="activate.html">立即去激活？</a>
         </div>
         -->
-        <div class="layui-tab layui-tab-brief" >
+        <div class="layui-tab layui-tab-brief" lay-filter="user">
             <ul class="layui-tab-title" id="LAY_mine">
-                <li data-type="mine-jie" lay-id="index" class="layui-this">
-                    我发的帖（<span th:text="${pageData.total}"></span>）
-                </li>
-                <li data-type="collection" data-url="/collection/find/" lay-id="collection">
-                    <a th:href="@{~/user/collection#collection}">
-                    我收藏的帖
+                <li data-type="mine-jie" lay-id="index">
+                    <a th:href="@{~/user/center#index}">
+                        我发的帖
                     </a>
+                </li>
+                <li data-type="collection" data-url="/collection/find/" lay-id="collection"  class="layui-this">
+                    我收藏的帖（<span th:text="${pageData.total}"></span>）
                 </li>
             </ul>
             <div class="layui-tab-content" style="padding: 20px 0;">
-                <div class="layui-tab-item layui-show">
+                <div class="layui-tab-item">
+                </div>
+                <div class="layui-tab-item">
                     <ul class="mine-view jie-row">
                         <li th:each="data : ${pageData.records}">
-                            <a class="jie-title" th:href="@{'/post/' + ${data.id}}" target="_blank" th:text="${data.title}"></a>
-                            <i th:text="${data.created}"></i>
-                            <a class="mine-edit" th:href="@{/user/post(id=${data.id})}">编辑</a>
-                            <em><text th:text="${data.view_count}"></text>阅/<text th:text="${data.comment_count}"></text> 答</em>
-                        </li>
+                            <a class="jie-title" href="../jie/detail.html" target="_blank"  th:text="${data.title}"></a>
+                            <i>收藏于23小时前</i>  </li>
                     </ul>
-                    <!--<div id="LAY_page"></div>-->
 
                     <div th:if="${#lists.isEmpty(pageData.records)}" class="fly-none">没有相关数据</div>
 

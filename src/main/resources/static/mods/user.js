@@ -173,12 +173,8 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
           avatarAdd.find('.loading').show();
         }
         ,done: function(res){
-          if(res.status == 0){
-            $.post('/user/set/', {
-              avatar: res.url
-            }, function(res){
+          if(res.code == 0){
               location.reload();
-            });
           } else {
             layer.msg(res.msg, {icon: 5});
           }
