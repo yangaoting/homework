@@ -42,8 +42,8 @@
                 <div class="layui-tab-item">
                     <ul class="mine-view jie-row">
                         <li th:each="data : ${pageData.records}">
-                            <a class="jie-title" href="../jie/detail.html" target="_blank"  th:text="${data.title}"></a>
-                            <i>收藏于23小时前</i>  </li>
+                            <a class="jie-title" th:href="@{'/post/' + ${data.post.id}}" target="_blank"  th:text="${data.post.title}"></a>
+                            <i th:text="${data.post.created}"></i>  </li>
                     </ul>
 
                     <div th:if="${#lists.isEmpty(pageData.records)}" class="fly-none">没有相关数据</div>

@@ -18,29 +18,44 @@
 <div class="layui-container fly-marginTop fly-user-main">
 
   <div th:replace="common/_center :: left('message')"></div>
-  
+
   <div class="fly-panel fly-panel-user" pad20>
-	  <div class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
+	  <div th:if="${not #lists.isEmpty(pageData.records)}" class="layui-tab layui-tab-brief" lay-filter="user" id="LAY_msg" style="margin-top: 15px;">
 	    <button class="layui-btn layui-btn-danger" id="LAY_delallmsg">清空全部消息</button>
 	    <div  id="LAY_minemsg" style="margin-top: 10px;">
-        <!--<div class="fly-none">您暂时没有最新消息</div>-->
-        <ul class="mine-msg">
-          <li data-id="123">
-            <blockquote class="layui-elem-quote">
-              <a href="/jump?username=Absolutely" target="_blank"><cite>Absolutely</cite></a>回答了您的求解<a target="_blank" href="/jie/8153.html/page/0/#item-1489505778669"><cite>layui后台框架</cite></a>
-            </blockquote>
-            <p><span>1小时前</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
-          </li>
-          <li data-id="123">
-            <blockquote class="layui-elem-quote">
-              系统消息：欢迎使用 layui
-            </blockquote>
-            <p><span>1小时前</span><a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a></p>
-          </li>
-        </ul>
+
+            <ul class="mine-msg" >
+              <li th:data-id="${data.id}" th:each="data : ${pageData.records}">
+
+                  <blockquote class="layui-elem-quote"  th:if="${data.type == 0}">
+                      系统消息：<text th:text="${data.content}"></text>
+                  </blockquote>
+
+                <blockquote class="layui-elem-quote" th:if="${data.type == 1 || data.type == 2}">
+                  <a th:href="@{'/u/' + ${data.author.id}}" target="_blank"><cite th:text="${data.author.username}"></cite></a>
+
+                    <text th:if="${data.type == 1}">评论了您的文章</text>
+                    <text th:if="${data.type == 2}">回答了您的评论</text>
+
+                    <a target="_blank" th:href="@{'/post/' + ${data.post_id}}"><!--/jie/8153.html/page/0/#item-1489505778669-->
+                        <cite th:text="${data.content}"></cite>
+                    </a>
+                </blockquote>
+
+                <p><span th:text="${data.created}"></span>
+                    <a href="javascript:;" class="layui-btn layui-btn-small layui-btn-danger fly-delete">删除</a>
+                </p>
+              </li>
+            </ul>
+
+            <div th:if="${not #lists.isEmpty(pageData.records)}" style="text-align: center">
+              <div th:include="common/page :: page"></div>
+            </div>
+        </div>
       </div>
-	  </div>
-	</div>
+
+      <div class="fly-none" th:if="${#lists.isEmpty(pageData.records)}">您暂时没有最新消息</div>
+  </div>
 
 </div>
 

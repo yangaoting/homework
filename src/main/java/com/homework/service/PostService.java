@@ -11,6 +11,6 @@ import com.homework.entity.Post;
  * @author yan'gaoting
  * @since 2018-11-01
  */
-public interface PostService extends IService<Post> {
+public interface PostService extends BaseService<Post> {
 
 }

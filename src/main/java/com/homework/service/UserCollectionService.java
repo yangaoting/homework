@@ -1,7 +1,7 @@
 package com.homework.service;
 
+import com.homework.entity.UserCollection;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.homework.entity.Comment;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.homework.entity.Comment;
  * </p>
  *
  * @author yan'gaoting
- * @since 2018-11-01
+ * @since 2018-12-11
  */
-public interface CommentService extends BaseService<Comment> {
+public interface UserCollectionService extends BaseService<UserCollection> {
 
 }

@@ -1,5 +1,7 @@
 package com.homework.controller;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -7,6 +9,8 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.homework.entity.Post;
 import com.homework.entity.User;
+import com.homework.entity.UserCollection;
+import com.homework.entity.UserMessage;
 import com.homework.shiro.AccountProfile;
 import com.homework.utils.Constant;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,12 +46,16 @@ public class CenterContoller extends BaseController{
 
     @GetMapping("/collection")
     public String collection(@RequestParam(defaultValue = "1") Integer current,@RequestParam(defaultValue = "10") Integer size){
-        Page<Post> page = new Page<>();
+        Page<UserCollection> page = new Page<>();
         page.setCurrent(current);
         page.setSize(size);
 
-        //TODO
-        req.setAttribute("pageData",new Page());
+        IPage<Map<String, Object>> pageData = userCollectionService.pageMaps(page,
+                new QueryWrapper<UserCollection>().eq("user_id", getProfileId()).orderByDesc("created"));
+
+        postService.join(pageData,"post_id");
+
+        req.setAttribute("pageData",pageData);
 
         return "user/collection";
     }
@@ -94,7 +103,8 @@ public class CenterContoller extends BaseController{
 
     @ResponseBody
     @PostMapping("/upload")
-    public R upload(@RequestParam(value = "file") MultipartFile file){
+    public R upload(@RequestParam(value = "file") MultipartFile file,
+                    @RequestParam(value = "type",defaultValue = "avatar") String type){
         if(file.isEmpty()){
             return R.failed("上传失败");
         }
@@ -107,7 +117,11 @@ public class CenterContoller extends BaseController{
         //文件上传路径
         String filePath = Constant.uploadDir;
 
-        filename = "avatar_" + getProfileId() + suffixName;
+        if("avatar".equalsIgnoreCase(type)){
+            filename = "/avatar/avatar_" + getProfileId() + suffixName;
+        }else if("post".equalsIgnoreCase(type)){
+            filename = "/post/post_" + DateUtil.format(new Date(), DatePattern.PURE_DATETIME_MS_PATTERN) + suffixName;
+        }
         File dest = new File(filePath + filename);
         //目录是否存在
         if(!dest.getParentFile().exists()){
@@ -153,7 +167,32 @@ public class CenterContoller extends BaseController{
     }
 
     @GetMapping("/message")
-    public String message(){
+    public String message(@RequestParam(defaultValue = "1") Integer current,
+                          @RequestParam(defaultValue = "10") Integer size){
+        Page<UserMessage> page = new Page<>();
+        page.setCurrent(current);
+        page.setSize(size);
+
+        IPage<Map<String, Object>> pageData = userMessageService.pageMaps(page,
+                new QueryWrapper<UserMessage>().eq("to_user_id", getProfileId()).orderByDesc("created"));
+
+        userService.join(pageData,"from_user_id");
+
+        postService.join(pageData,"post_id");
+
+        commentService.join(pageData,"comment_id");
+
+        req.setAttribute("pageData",pageData);
+
         return "user/message";
     }
+
+    @ResponseBody
+    @PostMapping("/message/remove")
+    public R removeMsg(Long id,boolean all){
+        boolean res = userMessageService.remove(new QueryWrapper<UserMessage>().eq("to_user_id", getProfileId()).eq(!all, "id", id));
+
+        return res ? R.ok(null) : R.failed("删除失败");
+    }
+
 }

@@ -325,14 +325,21 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     
     //阅读后删除
     dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
+      debugger;
       var othis = $(this).parents('li'), id = othis.data('id');
-      fly.json('/message/remove/', {
-        id: id
-      }, function(res){
-        if(res.status === 0){
-          othis.remove();
-          delEnd();
-        }
+      $.ajax({
+          url: '/user/message/remove',
+          data: {
+            id: id,
+            all: false
+          },
+          type: "POST",
+          success: function (res) {
+              if(res.code == '0'){
+                  othis.remove();
+                  delEnd();
+              }
+          }
       });
     });
 
@@ -340,15 +347,21 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     $('#LAY_delallmsg').on('click', function(){
       var othis = $(this);
       layer.confirm('确定清空吗？', function(index){
-        fly.json('/message/remove/', {
-          all: true
-        }, function(res){
-          if(res.status === 0){
-            layer.close(index);
-            othis.addClass('layui-hide');
-            delEnd(true);
-          }
-        });
+          $.ajax({
+              url: '/user/message/remove',
+              data: {
+                  id: null,
+                  all: true
+              },
+              type: "POST",
+              success: function (res) {
+                  if(res.code == '0'){
+                      layer.close(index);
+                      othis.addClass('layui-hide');
+                      delEnd(true);
+                  }
+              }
+          });
       });
     });
 
