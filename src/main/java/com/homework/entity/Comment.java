@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,6 +30,7 @@ public class Comment extends Model<Comment> {
     /**
      * 评论的内容
      */
+    @NotBlank(message = "内容不能为空")
     private String content;
 
     /**
@@ -38,6 +41,7 @@ public class Comment extends Model<Comment> {
     /**
      * 评论的内容ID
      */
+    @NotNull(message = "帖子ID不能为空")
     private Long postId;
 
     /**

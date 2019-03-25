@@ -28,18 +28,20 @@
                     <span class="layui-badge layui-bg-black" th:if="${post.level gt 0}">置顶</span>
                     <span class="layui-badge layui-bg-red" th:if="${post.recommend}">精帖</span>
 
-                    <!--管理员权限-->
-                    <shiro:hasRole name="admin">
-                    <div class="fly-admin-box" data-id="123">
-                        <span class="layui-btn layui-btn-xs jie-admin" type="del">删除</span>
+                    <div class="fly-admin-box" th:data-id="${post.id}">
+                        <shiro:user>
+                        <span class="layui-btn layui-btn-xs jie-admin" type="del" th:if="${post.user_id == session.profile.id}">删除</span>
+                        </shiro:user>
 
-                        <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>
-                        <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> -->
+                        <!--管理员权限-->
+                        <shiro:hasRole name="admin">
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="1">置顶</span>
+                            <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="stick" rank="0" style="background-color:#ccc;">取消置顶</span> -->
 
-                        <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span>
-                        <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
+                            <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="1">加精</span>
+                            <!-- <span class="layui-btn layui-btn-xs jie-admin" type="set" field="status" rank="0" style="background-color:#ccc;">取消加精</span> -->
+                        </shiro:hasRole>
                     </div>
-                    </shiro:hasRole>
 
                     <span class="fly-list-nums">
                         <a href="#comment"><i class="iconfont" title="回答">&#xe60c;</i> <span th:text="${post.comment_count}"></span></a>
@@ -58,7 +60,7 @@
                         </a>
                         <span>2017-11-30</span>
                     </div>
-                    <div class="detail-hits" id="LAY_jieAdmin" data-id="123">
+                    <div class="detail-hits" id="LAY_jieAdmin" th:data-id="${post.id}">
                         <span style="padding-right: 10px; color: #FF7200">悬赏：60飞吻</span>
 
                         <shiro:user>
@@ -79,20 +81,20 @@
                 </fieldset>
 
                 <ul class="jieda" id="jieda">
-                    <li data-id="111" class="jieda-daan">
+                    <li th:data-id="${data.id}" class="jieda-daan" th:each="data:${pageData.records}">
                         <a name="item-1111111111"></a>
                         <div class="detail-about detail-about-reply">
                             <a class="fly-avatar" href="">
-                                <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" ">
+                                <img th:src="${data.author.avatar}" alt=" ">
                             </a>
                             <div class="fly-detail-user">
                                 <a href="" class="fly-link">
-                                    <cite>贤心</cite>
+                                    <cite th:text="${data.author.username}"></cite>
                                     <i class="iconfont icon-renzheng" title="认证信息：XXX"></i>
-                                    <i class="layui-badge fly-badge-vip">VIP3</i>
+                                    <i class="layui-badge fly-badge-vip" th:text="${data.author.vipLevel}"></i>
                                 </a>
 
-                                <span>(楼主)</span>
+                                <span th:text="${data.author.id == post.author.id ? '(楼主)': ''} "></span>
                                 <!--
                                 <span style="color:#5FB878">(管理员)</span>
                                 <span style="color:#FF9E3F">（社区之光）</span>
@@ -101,62 +103,28 @@
                             </div>
 
                             <div class="detail-hits">
-                                <span>2017-11-30</span>
+                                <span th:text="${data.created}"></span>
                             </div>
 
-                            <i class="iconfont icon-caina" title="最佳答案"></i>
+                            <!--<i class="iconfont icon-caina" title="最佳答案"></i>-->
                         </div>
-                        <div class="detail-body jieda-body photos">
-                            <p>香菇那个蓝瘦，这是一条被采纳的回帖</p>
+                        <div class="detail-body jieda-body photos" th:text="${data.content}">
                         </div>
                         <div class="jieda-reply">
-              <span class="jieda-zan zanok" type="zan">
-                <i class="iconfont icon-zan"></i>
-                <em>66</em>
-              </span>
-                            <span type="reply">
-                <i class="iconfont icon-svgmoban53"></i>
-                回复
-              </span>
+                          <span class="jieda-zan zanok" type="zan">
+                            <i class="iconfont icon-zan"></i>
+                            <em th:text="${data.vote_up}"></em>
+                          </span>
+                          <span type="reply">
+                            <i class="iconfont icon-svgmoban53"></i>
+                            回复
+                          </span>
                             <div class="jieda-admin">
-                                <span type="edit">编辑</span>
-                                <span type="del">删除</span>
+                                <shiro:user>
+                                <!--<span type="edit">编辑</span>-->
+                                <span type="del" th:if="${data.user_id == session.profile.id}">删除</span>
                                 <!-- <span class="jieda-accept" type="accept">采纳</span> -->
-                            </div>
-                        </div>
-                    </li>
-
-                    <li data-id="111">
-                        <a name="item-1111111111"></a>
-                        <div class="detail-about detail-about-reply">
-                            <a class="fly-avatar" href="">
-                                <img src="https://tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" alt=" ">
-                            </a>
-                            <div class="fly-detail-user">
-                                <a href="" class="fly-link">
-                                    <cite>贤心</cite>
-                                </a>
-                            </div>
-                            <div class="detail-hits">
-                                <span>2017-11-30</span>
-                            </div>
-                        </div>
-                        <div class="detail-body jieda-body photos">
-                            <p>蓝瘦那个香菇，这是一条没被采纳的回帖</p>
-                        </div>
-                        <div class="jieda-reply">
-              <span class="jieda-zan" type="zan">
-                <i class="iconfont icon-zan"></i>
-                <em>0</em>
-              </span>
-                            <span type="reply">
-                <i class="iconfont icon-svgmoban53"></i>
-                回复
-              </span>
-                            <div class="jieda-admin">
-                                <span type="edit">编辑</span>
-                                <span type="del">删除</span>
-                                <span class="jieda-accept" type="accept">采纳</span>
+                                </shiro:user>
                             </div>
                         </div>
                     </li>
@@ -164,9 +132,12 @@
                     <!-- 无数据时 -->
                     <!-- <li class="fly-none">消灭零回复</li> -->
                 </ul>
+                <div th:if="${not #lists.isEmpty(pageData.records)}" style="text-align: center">
+                    <div th:include="common/page :: page"></div>
+                </div>
 
                 <div class="layui-form layui-form-pane">
-                    <form action="/jie/reply/" method="post">
+                    <form action="/user/post/comment" method="post">
                         <div class="layui-form-item layui-form-text">
                             <a name="comment"></a>
                             <div class="layui-input-block">
@@ -174,8 +145,8 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <input type="hidden" name="jid" value="123">
-                            <button class="layui-btn" lay-filter="*" lay-submit>提交回复</button>
+                            <input type="hidden" name="postId" th:value="${post.id}">
+                            <button class="layui-btn" lay-filter="comment" lay-submit>提交回复</button>
                         </div>
                     </form>
                 </div>
@@ -241,7 +212,7 @@
             </div>
 
             <div class="fly-panel" style="padding: 20px 0; text-align: center;">
-                <img src="../../res/images/weixin.jpg" style="max-width: 100%;" alt="layui">
+                <img src="/images/weixin.jpg" style="max-width: 100%;" alt="layui">
                 <p style="position: relative; color: #666;">微信扫码关注 layui 公众号</p>
             </div>
 
@@ -264,7 +235,25 @@
             othis.html(fly.content(html));
         });
 
+        var form = layui.form;
+        //监听提交
+        form.on('submit(comment)', function (data) {
+            fly.json("/user/post/comment", data.field, function (res) {
+                if(res.code === 0){
+                    layer.msg("操作成功");
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+
+                } else {
+                    layer.msg(res.msg);
+                }
+            });
+            return false;
+        });
+
     });
 </script>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.homework.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -89,6 +90,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     @Override
     public void join(Map<String, Object> map, String filed) {
+        if (MapUtil.isEmpty(map) || map.get(filed) == null) return;
         Map<String,Object> joinColumns = new HashMap<>();
 
         //字段的值
@@ -100,6 +102,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         joinColumns.put("email",user.getEmail());
         joinColumns.put("avatar",user.getAvatar());
         joinColumns.put("id",user.getId());
+        joinColumns.put("vipLevel",user.getVipLevel());
 
         map.put("author",joinColumns);
     }

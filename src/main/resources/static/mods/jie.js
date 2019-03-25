@@ -37,8 +37,10 @@ layui.define('fly', function(exports){
     }
   });
 
+    console.log("222222222");
+
   //提交回答
-  fly.form['/jie/reply/'] = function(data, required){
+  fly.form['/user/post/comment'] = function(data, required){
     var tpl = '<li>\
       <div class="detail-about detail-about-reply">\
         <a class="fly-avatar" href="/u/{{ layui.cache.user.uid }}" target="_blank">\
@@ -76,11 +78,11 @@ layui.define('fly', function(exports){
     del: function(div){
       layer.confirm('确认删除该求解么？', function(index){
         layer.close(index);
-        fly.json('/api/jie-delete/', {
+        fly.json('/user/post/delete', {
           id: div.data('id')
         }, function(res){
-          if(res.status === 0){
-            location.href = '/jie/';
+          if(res.code === 0){
+            location.href = '/';
           } else {
             layer.msg(res.msg);
           }
@@ -96,7 +98,7 @@ layui.define('fly', function(exports){
         ,rank: othis.attr('rank')
         ,field: othis.attr('field')
       }, function(res){
-        if(res.status === 0){
+        if(res.code === 0){
           location.reload();
         }
       });
@@ -105,8 +107,8 @@ layui.define('fly', function(exports){
     //收藏
     ,collect: function(div){
       var othis = $(this), type = othis.data('type');
-      fly.json('/collection/'+ type +'/', {
-        cid: div.data('id')
+      fly.json('/user/post/collection/'+ type +'/', {
+        postId: div.data('id')
       }, function(res){
         if(type === 'add'){
           othis.data('type', 'remove').html('取消收藏').addClass('layui-btn-danger');
@@ -127,9 +129,10 @@ layui.define('fly', function(exports){
     var div = $('.fly-admin-box'), jieAdmin = $('#LAY_jieAdmin');
     //查询帖子是否收藏
     if(jieAdmin[0] && layui.cache.user.uid != -1){
-      fly.json('/collection/find/', {
-        cid: div.data('id')
+      fly.json('/user/post/collection/find', {
+        postId: div.data('id')
       }, function(res){
+        console.log("--------------")
         jieAdmin.append('<span class="layui-btn layui-btn-xs jie-admin '+ (res.data.collection ? 'layui-btn-danger' : '') +'" type="collect" data-type="'+ (res.data.collection ? 'remove' : 'add') +'">'+ (res.data.collection ? '取消收藏' : '收藏') +'</span>');
       });
     }
@@ -143,7 +146,7 @@ layui.define('fly', function(exports){
         ok: ok
         ,id: li.data('id')
       }, function(res){
-        if(res.status === 0){
+        if(res.code === 0){
           var zans = othis.find('em').html()|0;
           othis[ok ? 'removeClass' : 'addClass']('zanok');
           othis.find('em').html(ok ? (--zans) : (++zans));
@@ -166,7 +169,7 @@ layui.define('fly', function(exports){
         fly.json('/api/jieda-accept/', {
           id: li.data('id')
         }, function(res){
-          if(res.status === 0){
+          if(res.code === 0){
             $('.jieda-accept').remove();
             li.addClass('jieda-daan');
             li.find('.detail-about').append('<i class="iconfont icon-caina" title="最佳答案"></i>');
@@ -206,10 +209,10 @@ layui.define('fly', function(exports){
     ,del: function(li){ //删除
       layer.confirm('确认删除该回答么？', function(index){
         layer.close(index);
-        fly.json('/api/jieda-delete/', {
+        fly.json('/user/post/comment/delete/', {
           id: li.data('id')
         }, function(res){
-          if(res.status === 0){
+          if(res.code === 0){
             var count = dom.jiedaCount.text()|0;
             dom.jiedaCount.html(--count);
             li.remove();

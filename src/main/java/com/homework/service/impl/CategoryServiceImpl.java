@@ -1,5 +1,6 @@
 package com.homework.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import com.homework.entity.Category;
 import com.homework.mapper.CategoryMapper;
 import com.homework.service.CategoryService;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class CategoryServiceImpl extends BaseServiceImpl<CategoryMapper, Category> implements CategoryService {
     @Override
     public void join(Map<String, Object> map, String filed) {
+        if(MapUtil.isEmpty(map) || map.get(filed) == null) return;
+
         Map<String,Object> joinColumns = new HashMap<>();
 
         //字段值

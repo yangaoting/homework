@@ -275,7 +275,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       fly.json('/api/unbind', {
         type: type
       }, function(res){
-        if(res.status === 0){
+        if(res.code === 0){
           layer.alert('已成功解绑。', {
             icon: 1
             ,end: function(){
@@ -325,10 +325,9 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
     
     //阅读后删除
     dom.minemsg.on('click', '.mine-msg li .fly-delete', function(){
-      debugger;
       var othis = $(this).parents('li'), id = othis.data('id');
       $.ajax({
-          url: '/user/message/remove',
+          url: '/user/message/remove/',
           data: {
             id: id,
             all: false
@@ -348,7 +347,7 @@ layui.define(['laypage', 'fly', 'element', 'flow'], function(exports){
       var othis = $(this);
       layer.confirm('确定清空吗？', function(index){
           $.ajax({
-              url: '/user/message/remove',
+              url: '/user/message/remove/',
               data: {
                   id: null,
                   all: true
