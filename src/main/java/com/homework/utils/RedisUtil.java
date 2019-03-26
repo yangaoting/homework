@@ -1,13 +1,14 @@
 package com.homework.utils;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -544,5 +545,60 @@ public class RedisUtil {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    //====================有序集合 sort set===============
+
+    /**
+     * 添加元素
+     * @param key
+     * @param value
+     * @param score
+     * @return
+     */
+    public boolean zSet(String key,Object value,double score){
+        return redisTemplate.opsForZSet().add(key, value, score);
+    }
+
+    public long batchZSet(String key, Set<ZSetOperations.TypedTuple> typles){
+        return  redisTemplate.opsForZSet().add(key,typles);
+    }
+
+    public double zIncrementScore(String key,Object value,long delta){
+        return redisTemplate.opsForZSet().incrementScore(key, value, delta);
+    }
+
+    public void zUnionAndStore(String key, Collection otherKeys, String destKey) {
+        redisTemplate.opsForZSet().unionAndStore(key, otherKeys, destKey);
+    }
+   /* public long ss(String key, Collection otherKeys,String destKey){
+        return redisTemplate.opsForZSet().unionAndStore(key, otherKeys, destKey);
+    }*/
+
+
+    /**
+     * 获取zset分数
+     * @param key
+     * @param value
+     * @return
+     */
+    public long getZsetScore(String key,Object value){
+        Double score = redisTemplate.opsForZSet().score(key, value);
+        if(score == null){
+            return 0L;
+        }else{
+            return score.longValue();
+        }
+    }
+
+    /**
+     * 获取有序集合key中成员member的排名 降序
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public Set<ZSetOperations.TypedTuple> getZsetRank(String key,long start,long end){
+        return  redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
     }
 }

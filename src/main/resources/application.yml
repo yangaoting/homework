@@ -11,9 +11,11 @@ spring:
     password: root
 
   redis:
-    sentinel:
-      master: mymaster
-      nodes: 47.106.38.101:26379,47.106.38.101:26380
+    #sentinel:
+      #master: mymaster
+      #nodes: 47.106.38.101:26379,47.106.38.101:26380
+    host: 47.106.232.229
+    port: 6379
 logging:
   level:
     root: INFO

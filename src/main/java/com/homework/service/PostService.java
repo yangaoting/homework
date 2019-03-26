@@ -13,4 +13,9 @@ import com.homework.entity.Post;
  */
 public interface PostService extends BaseService<Post> {
 
+    void incrZsetValueAndUnionForLastWeekRank(Long postId);
+
+    void zUnionAndStoreLast7DayForLastWeekRank();
+
+    void initIndexWeekRank();
 }

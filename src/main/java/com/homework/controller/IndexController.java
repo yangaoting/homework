@@ -12,10 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -23,8 +25,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -36,13 +37,16 @@ public class IndexController extends BaseController{
     private Producer producer;
 
     @GetMapping("/")
-    public String index(){
+    public String index(@RequestParam(defaultValue = "1") Integer current,
+                        @RequestParam(defaultValue = "10") Integer size){
 
         Page<Post> page = new Page<Post>();
-        page.setCurrent(1);
-        page.setSize(10);
+        page.setCurrent(current);
+        page.setSize(size);
 
-        IPage<Map<String, Object>> pageData = postService.pageMaps(page, new QueryWrapper<Post>().orderByDesc("created"));
+        IPage<Map<String, Object>> pageData = postService.pageMaps(page, new QueryWrapper<Post>()
+                .orderByDesc("created"));
+
         //添加关联的用户信息
         userService.join(pageData,"user_id");
         categoryService.join(pageData,"category_id");
@@ -134,6 +138,44 @@ public class IndexController extends BaseController{
     public String logout(){
         SecurityUtils.getSubject().logout();
         return "redirect:/";
+    }
+
+
+    /**
+     * TODO 要使用redis有序列表实现
+     * 思路：
+     * 项目启动初始化最近7天发表文章的评论数量，
+     * 发表评论给对应点的文章添加comment-count。同时设置有效期。
+     *
+     * 命令使用：
+     * 1、ZINCRBY rank:20181020 5 1
+     * 2、ZRANGE rank:20181020 0 -1 withscores
+     * 3、ZREVRANGE rank:20181220 0 -1 withsroces
+     * 4、ZINCRBY rank:20181019 99 1
+     * 统计
+     * 5、ZUNIONSTORE rank:last_week 7 rank:20181019 rank:20181020 rank:20181021 weights 1 1 1
+     * 6、ZREVRANGE rank:last_week 0 -1 withscores
+     * 设定有效期
+     * 7、ttl rank:last_week
+     * 8、expire rank:last_week 60*60*24*7
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/post/hots")
+    public R hotPost(){
+        Set<ZSetOperations.TypedTuple> lastWeekRank = redisUtil.getZsetRank("last_week_rank", 0, 6);
+
+        ArrayList<Map<String,Object>> hotPosts = new ArrayList<>();
+        for (ZSetOperations.TypedTuple typedTuple:lastWeekRank){
+            Map<String ,Object> map = new HashMap<>();
+            map.put("comment_count",typedTuple.getScore());
+            map.put("id",redisUtil.hget("rank_post_" + typedTuple.getValue(),"post:id"));
+            map.put("title",redisUtil.hget("rank_post_" + typedTuple.getValue(),"post:title"));
+
+            hotPosts.add(map);
+        }
+
+        return R.ok(hotPosts);
     }
 }
 

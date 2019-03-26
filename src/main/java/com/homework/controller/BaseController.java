@@ -2,6 +2,7 @@ package com.homework.controller;
 
 import com.homework.service.*;
 import com.homework.shiro.AccountProfile;
+import com.homework.utils.RedisUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,6 +30,9 @@ public class BaseController {
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    RedisUtil redisUtil;
 
     protected AccountProfile getProfile() {
         return (AccountProfile) SecurityUtils.getSubject().getPrincipal();

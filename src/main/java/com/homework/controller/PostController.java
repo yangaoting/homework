@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Controller
@@ -226,6 +227,13 @@ public class PostController extends BaseController {
         comment.setModified(new Date());
         comment.setStatus(Constant.NORMAL_STATUS);
         commentService.save(comment);
+
+        //评论数量加一
+        post.setCommentCount(new AtomicInteger(post.getCommentCount()).incrementAndGet());
+        postService.save(post);
+
+        //更新首页排版版的评论数量
+        postService.incrZsetValueAndUnionForLastWeekRank(comment.getPostId());
 
         //TODO 记录动作
 

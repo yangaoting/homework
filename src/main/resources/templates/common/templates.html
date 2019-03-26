@@ -112,54 +112,41 @@
 
 <!--本周热议-->
 <div th:fragment="weekPopular">
-    <dl class="fly-panel fly-list-one">
+    <dl class="fly-panel fly-list-one" id="post-hots">
         <dt class="fly-panel-title">本周热议</dt>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-        <dd>
-            <a href="jie/detail.html">基于 layui 的极简社区页面模版</a>
-            <span><i class="iconfont icon-pinglun1"></i> 16</span>
-        </dd>
-
-        <!-- 无数据时 -->
-        <!--
-        <div class="fly-none">没有相关数据</div>
-        -->
+        <script id="hotsDd" type="text/html">
+            {{#  layui.each(d.list, function(index, item){ }}
+            <dd>
+                <a href="/post/{{item.id}}">{{ item.title }}</a>
+                <span><i class="iconfont icon-pinglun1"></i> {{ item.comment_count }}</span>
+            </dd>
+            {{#  }); }}
+            {{#  if(d.list.length === 0){ }}
+            <div class="fly-none">没有相关数据</div>
+            {{#  } }}
+        </script>
     </dl>
+    <script>
+        layui.use(['laytpl', 'fly'], function() {
+            var laytpl = layui.laytpl;
+
+            var post_hots = document.getElementById("post-hots");
+            var tpl = document.getElementById("hotsDd").innerHTML;
+            var data = {};
+            $.ajax({
+                url: '/post/hots',
+                async: false,
+                success: function (res) {
+                    if (res.code == 0) {
+                        data.list = res.data;
+                    }
+                }
+            });
+            laytpl(tpl).render(data, function (html) {
+                post_hots.innerHTML += html;
+            });
+        });
+    </script>
 </div>
 <!--本周热议结束-->
 
