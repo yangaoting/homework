@@ -1,0 +1,19 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: hw-gatway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+zuul:
+  routes:
+    hw-blog:
+      path: /**
+      serviceId: hw-blog
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
